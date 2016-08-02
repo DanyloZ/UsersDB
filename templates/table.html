@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<style type="text/css">
+   TABLE {
+    width: 300px;
+    border-collapse: collapse;
+   }
+   TD, TH {
+    padding: 3px;
+    border: 1px solid black;
+   }
+   TH {
+    background: #b0e0e6;
+   }
+</style>
+<p>
+<table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+        </tr>
+    <#list usersFromDB as user>
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.dateOfBirth}</td>
+        </tr>
+    </#list>
+    <#list users as user>
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.dateOfBirth}</td>
+        </tr>
+    </#list>
+</table>
+<p></p>
+<form action="/" method="GET">
+    <input type="submit" value="Add user">
+</form>
+<form action="/table" method="POST">
+    <input type="submit" value="Save to DataBase">
+</form>
+</body>
+</html>

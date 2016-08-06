@@ -19,11 +19,9 @@ public class DAO {
         ArrayList<User> usersFromDB = new ArrayList<>();
         try {
             String getUsersQuery = "SELECT Id, Name, Date_of_Birth FROM user";
-            Statement stmt;
-            ResultSet rs;
             con = DriverManager.getConnection(url, user, password);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(getUsersQuery);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(getUsersQuery);
             while (rs.next()) {
                 User user = new User(String.valueOf(rs.getInt(1)), rs.getString(2), rs.getDate(3).toLocalDate());
                 usersFromDB.add(user);
@@ -49,6 +47,18 @@ public class DAO {
             }
             con.close();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeUser(String id) {
+        try {
+            String removeUserQuery = "DELETE FROM user WHERE Id = " + id;
+            con = DriverManager.getConnection(url, user, password);
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(removeUserQuery);
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

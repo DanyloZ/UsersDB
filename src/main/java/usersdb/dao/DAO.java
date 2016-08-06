@@ -1,29 +1,31 @@
-package usersDB.dbdataproccessing;
+package usersdb.dao;
 
-import usersDB.main.User;
-import usersDB.templater.PageGenerator;
+import usersdb.buffer.Buffer;
+import usersdb.entity.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DBDataProcessing {
+public class DAO {
     private static final String url = "jdbc:mysql://localhost:3306/test_db?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String user = "root";
     private static final String password = "genius";
-    private static String getUsersQuery = "SELECT Id, Name, Date_of_Birth FROM user";
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
 
-    public static ArrayList<User> getUsersFromDB() {
+    private static Connection con;
+
+
+    public static ArrayList<User> getUsers() {
 
         ArrayList<User> usersFromDB = new ArrayList<>();
         try {
+            String getUsersQuery = "SELECT Id, Name, Date_of_Birth FROM user";
+            Statement stmt;
+            ResultSet rs;
             con = DriverManager.getConnection(url, user, password);
             stmt = con.createStatement();
             rs = stmt.executeQuery(getUsersQuery);
             while (rs.next()) {
-                User user = new User(rs.getInt(1), rs.getString(2), rs.getDate(3).toLocalDate());
+                User user = new User(String.valueOf(rs.getInt(1)), rs.getString(2), rs.getDate(3).toLocalDate());
                 usersFromDB.add(user);
             }
             con.close();
@@ -34,16 +36,15 @@ public class DBDataProcessing {
         return usersFromDB;
     }
 
-    public static void saveUsersToDB() {
+    public static void saveUsers() {
         try {
             con = DriverManager.getConnection(url, user, password);
             PreparedStatement ps = con.prepareStatement("INSERT INTO user "
-                    +"(Id, Name, Date_of_Birth) "
-                    +"VALUES (?,?,?)");
-            for (User user : (ArrayList<User>)PageGenerator.getPageVariables().get("users")) {
-                ps.setInt(1, user.getId());
-                ps.setString(2, user.getName());
-                ps.setDate(3, java.sql.Date.valueOf(user.getDateOfBirth()));
+                    +"(Name, Date_of_Birth) "
+                    +"VALUES (?,?)");
+            for (User user : Buffer.getBuffer().getNewUsers()) {
+                ps.setString(1, user.getName());
+                ps.setDate(2, java.sql.Date.valueOf(user.getDateOfBirth()));
                 ps.executeUpdate();
             }
             con.close();

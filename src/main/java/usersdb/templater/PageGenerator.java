@@ -1,16 +1,13 @@
-package usersDB.templater;
+package usersdb.templater;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import usersDB.main.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PageGenerator {
@@ -25,19 +22,11 @@ public class PageGenerator {
         return pageGenerator;
     }
 
-    private static Map <String, Object> pageVariables = new HashMap<>();
-    static{
-        pageVariables.put("users", new ArrayList<User>());
-    }
-    public static Map<String, Object> getPageVariables() {
-        return pageVariables;
-    }
-
-    public String getPage(String filename) {
+    public String getPage(String filename, Map<String, Object> data) {
         Writer stream = new StringWriter();
         try {
             Template template = cfg.getTemplate(HTML_DIR + File.separator + filename);
-            template.process(pageVariables, stream);
+            template.process(data, stream);
         } catch (IOException | TemplateException e) {
             throw new RuntimeException(e);
         }

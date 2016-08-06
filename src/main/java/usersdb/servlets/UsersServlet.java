@@ -1,8 +1,8 @@
-package usersDB.servlets;
+package usersdb.servlets;
 
-import usersDB.dbdataproccessing.DBDataProcessing;
-import usersDB.main.User;
-import usersDB.templater.PageGenerator;
+import usersdb.dao.DAO;
+import usersdb.entity.User;
+import usersdb.templater.PageGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,12 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class UsersTableServlet extends HttpServlet{
+import static usersdb.buffer.Buffer.getBuffer;
+
+public class UsersServlet extends HttpServlet{
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
-
-        response.getWriter().println(PageGenerator.instance().getPage("table.html"));
+        ArrayList<User> allUsers  = new ArrayList<>();
+        allUsers.addAll(DAO.getUsers());
+        allUsers.addAll(getBuffer().getNewUsers());
+        Map<String, Object> pageVariables = new HashMap<>();
+        pageVariables.put("users", allUsers);
+        response.getWriter().println(PageGenerator.instance().getPage("users.html", pageVariables));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -26,9 +34,9 @@ public class UsersTableServlet extends HttpServlet{
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        DBDataProcessing.saveUsersToDB();
-        PageGenerator.getPageVariables().put("users", new ArrayList<User>());
-        response.sendRedirect("/index.html");
+        DAO.saveUsers();
+        getBuffer().refreshUserList();
+        response.sendRedirect("/users");
     }
 
 }

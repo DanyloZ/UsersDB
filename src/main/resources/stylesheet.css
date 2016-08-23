@@ -1,0 +1,22 @@
+
+#users {
+    width: 300px;
+    border-collapse: collapse;
+   }
+   TD, TH {
+    padding: 3px;
+    border: 1px solid black;
+   }
+   TH {
+    background: #b0e0e6;
+   }
+#buttons {
+width: 300px;
+border-collapse: collapse;
+border: 2px solid white;
+
+}
+#buttons TD, TH {
+             padding: 3px;
+             border: 2px solid white;
+            }

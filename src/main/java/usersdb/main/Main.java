@@ -1,6 +1,9 @@
 package usersdb.main;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import usersdb.servlets.AddUserServlet;
@@ -15,8 +18,16 @@ public class Main {
         context.addServlet(new ServletHolder(addUserServlet), "/adduser");
         context.addServlet(new ServletHolder(usersServlet), "/users");
 
+        ResourceHandler resource = new ResourceHandler();
+        resource.setResourceBase("src/main/resources");
+        //resource.setDirectoriesListed(true);
+
+        HandlerCollection handlerList = new HandlerCollection();
+        handlerList.setHandlers(new Handler[]{resource, context});
+
         Server server = new Server(8080);
-        server.setHandler(context);
+        server.setHandler(handlerList);
+
 
         server.start();
     }

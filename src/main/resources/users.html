@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"/>
     <meta charset="UTF-8">
     <title>Users</title>
 </head>
-<style type="text/css">
-   TABLE {
-    width: 300px;
-    border-collapse: collapse;
-   }
-   TD, TH {
-    padding: 3px;
-    border: 1px solid black;
-   }
-   TH {
-    background: #b0e0e6;
-   }
-</style>
 <p>
-<table>
+<table id="users">
         <tr>
             <th>Id</th>
             <th>Name</th>
@@ -32,13 +21,22 @@
         </tr>
     </#list>
 </table>
+</p>
+<table id="buttons">
+    <tr>
+        <td>
+            <form action="/adduser" method="GET">
+                <input type="submit" value="Add user">
+            </form>
+        </td>
+        <td>
+            <form action="/users" method="POST">
+                <input type="submit" name="save" value="Save to DataBase">
+            </form>
+        </td>
+    </tr>
+</table>
 <p></p>
-<form action="/adduser" method="GET">
-    <input type="submit" value="Add user">
-</form>
-<form action="/users" method="POST">
-    <input type="submit" name="save" value="Save to DataBase">
-</form>
 <form action="/users" method="POST">
     Id: <input type="text" name="Id"/>
     <input type="submit" name="remove" value="Remove user">
